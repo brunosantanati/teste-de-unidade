@@ -132,4 +132,8 @@ public class LeilaoDao {
 	}
 	
 	public int x() { return 10; }
+	
+	public static String testeEstatico() { return "teste"; }
+	
+	public String teste() { return "teste"; }
 }

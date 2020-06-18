@@ -69,4 +69,12 @@ public class EncerradorDeLeilaoTest {
 		assertEquals(0, encerrador.getTotalEncerrados());
 	}
 
+	@Test
+	public void testandoMetodoEstaticoComMock() {
+		LeilaoDao daoFalso = mock(LeilaoDao.class);
+        //when(daoFalso.testeEstatico()).thenReturn("testeee"); //É impossível mockar métodos estáticos!
+		when(daoFalso.teste()).thenReturn("testeee");
+		
+        assertEquals("testeee", daoFalso.teste());
+	}
 }
