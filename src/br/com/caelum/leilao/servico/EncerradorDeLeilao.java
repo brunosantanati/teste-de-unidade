@@ -9,9 +9,13 @@ import br.com.caelum.leilao.infra.dao.LeilaoDao;
 public class EncerradorDeLeilao {
 
 	private int total = 0;
+	private final LeilaoDao dao;
+
+	public EncerradorDeLeilao(LeilaoDao dao) {
+		this.dao = dao;
+	}
 
 	public void encerra() {
-		LeilaoDao dao = new LeilaoDao();
 		List<Leilao> todosLeiloesCorrentes = dao.correntes();
 
 		for (Leilao leilao : todosLeiloesCorrentes) {

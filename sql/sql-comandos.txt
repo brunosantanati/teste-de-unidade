@@ -1,0 +1,3 @@
+COMANDOS SQL EXECUTADOS
+
+create database mocks;
