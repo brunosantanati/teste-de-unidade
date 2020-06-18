@@ -14,8 +14,9 @@ import java.util.List;
 import br.com.caelum.leilao.dominio.Lance;
 import br.com.caelum.leilao.dominio.Leilao;
 import br.com.caelum.leilao.dominio.Usuario;
+import br.com.caelum.leilao.interfaces.RepositorioDeLeiloes;
 
-public class LeilaoDao {
+public class LeilaoDao implements RepositorioDeLeiloes {
 
 	private Connection conexao;
 
@@ -132,8 +133,5 @@ public class LeilaoDao {
 	}
 	
 	public int x() { return 10; }
-	
-	public static String testeEstatico() { return "teste"; }
-	
-	public String teste() { return "teste"; }
+
 }

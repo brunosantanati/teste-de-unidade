@@ -14,7 +14,7 @@ import org.junit.Test;
 
 import br.com.caelum.leilao.builder.CriadorDeLeilao;
 import br.com.caelum.leilao.dominio.Leilao;
-import br.com.caelum.leilao.infra.dao.LeilaoDao;
+import br.com.caelum.leilao.interfaces.RepositorioDeLeiloes;
 
 public class EncerradorDeLeilaoTest {
 	
@@ -28,7 +28,7 @@ public class EncerradorDeLeilaoTest {
         Leilao leilao2 = new CriadorDeLeilao().para("Geladeira")
             .naData(antiga).constroi();
 
-        LeilaoDao daoFalso = mock(LeilaoDao.class);
+        RepositorioDeLeiloes daoFalso = mock(RepositorioDeLeiloes.class);
         when(daoFalso.correntes()).thenReturn(Arrays.asList(leilao1, leilao2));
 
         EncerradorDeLeilao encerrador = new EncerradorDeLeilao(daoFalso);
@@ -47,7 +47,7 @@ public class EncerradorDeLeilaoTest {
 		Leilao leilao1 = new CriadorDeLeilao().para("TV de plasma").naData(ontem).constroi();
 		Leilao leilao2 = new CriadorDeLeilao().para("Geladeira").naData(ontem).constroi();
 		
-		LeilaoDao daoFalso = mock(LeilaoDao.class);
+		RepositorioDeLeiloes daoFalso = mock(RepositorioDeLeiloes.class);
 		when(daoFalso.correntes()).thenReturn(Arrays.asList(leilao1, leilao2));
 		
 		EncerradorDeLeilao encerrador = new EncerradorDeLeilao(daoFalso);
@@ -60,21 +60,12 @@ public class EncerradorDeLeilaoTest {
 	
 	@Test
 	public void naoDeveEncerrarLeiloesCasoNaoHajaNenhum() {
-		LeilaoDao daoFalso = mock(LeilaoDao.class);
+		RepositorioDeLeiloes daoFalso = mock(RepositorioDeLeiloes.class);
 		when(daoFalso.correntes()).thenReturn(new ArrayList<Leilao>());
 		
 		EncerradorDeLeilao encerrador = new EncerradorDeLeilao(daoFalso);
 		encerrador.encerra();
 		
 		assertEquals(0, encerrador.getTotalEncerrados());
-	}
-
-	@Test
-	public void testandoMetodoEstaticoComMock() {
-		LeilaoDao daoFalso = mock(LeilaoDao.class);
-        //when(daoFalso.testeEstatico()).thenReturn("testeee"); //É impossível mockar métodos estáticos!
-		when(daoFalso.teste()).thenReturn("testeee");
-		
-        assertEquals("testeee", daoFalso.teste());
 	}
 }
