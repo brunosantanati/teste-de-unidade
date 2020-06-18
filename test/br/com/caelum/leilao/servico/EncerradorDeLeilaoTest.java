@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 
@@ -55,6 +56,17 @@ public class EncerradorDeLeilaoTest {
         assertEquals(0, encerrador.getTotalEncerrados());
         assertFalse(leilao1.isEncerrado());
         assertFalse(leilao2.isEncerrado());
+	}
+	
+	@Test
+	public void naoDeveEncerrarLeiloesCasoNaoHajaNenhum() {
+		LeilaoDao daoFalso = mock(LeilaoDao.class);
+		when(daoFalso.correntes()).thenReturn(new ArrayList<Leilao>());
+		
+		EncerradorDeLeilao encerrador = new EncerradorDeLeilao(daoFalso);
+		encerrador.encerra();
+		
+		assertEquals(0, encerrador.getTotalEncerrados());
 	}
 
 }
