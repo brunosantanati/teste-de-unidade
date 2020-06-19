@@ -225,5 +225,15 @@ public class EncerradorDeLeilaoTest {
         encerrador.encerra();
 
         verify(carteiroFalso, never()).envia(any(Leilao.class));
+        
+        /*
+
+		A classe Matchers possui diversos métodos que podem ser usados para especificarmos que argumentos nosso mock pode receber numa chamada de método. Isso permite escrever testes mais facilmente e deixa nosso código mais flexível.
+		
+		Podemos, por exemplo, garantir que um mock vai ser chamado com uma String começando com "Importante:". Veja só:
+		
+		verify(meuMock).imprimeMensagem(startsWith("Importante:"));
+
+         */
 	}
 }
