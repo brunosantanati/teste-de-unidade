@@ -17,6 +17,7 @@ import org.junit.Test;
 
 import br.com.caelum.leilao.builder.CriadorDeLeilao;
 import br.com.caelum.leilao.dominio.Leilao;
+import br.com.caelum.leilao.infra.email.EnviadorDeEmail;
 import br.com.caelum.leilao.interfaces.RepositorioDeLeiloes;
 
 public class EncerradorDeLeilaoTest {
@@ -37,8 +38,10 @@ public class EncerradorDeLeilaoTest {
 
         RepositorioDeLeiloes daoFalso = mock(RepositorioDeLeiloes.class);
         when(daoFalso.correntes()).thenReturn(Arrays.asList(leilao1, leilao2));
+        
+        EnviadorDeEmail carteiroFalso = mock(EnviadorDeEmail.class);
 
-        EncerradorDeLeilao encerrador = new EncerradorDeLeilao(daoFalso);
+        EncerradorDeLeilao encerrador = new EncerradorDeLeilao(daoFalso, carteiroFalso);
         encerrador.encerra();
 
         assertEquals(2, encerrador.getTotalEncerrados());
@@ -57,7 +60,9 @@ public class EncerradorDeLeilaoTest {
 		RepositorioDeLeiloes daoFalso = mock(RepositorioDeLeiloes.class);
 		when(daoFalso.correntes()).thenReturn(Arrays.asList(leilao1, leilao2));
 		
-		EncerradorDeLeilao encerrador = new EncerradorDeLeilao(daoFalso);
+		EnviadorDeEmail carteiroFalso = mock(EnviadorDeEmail.class);
+		
+		EncerradorDeLeilao encerrador = new EncerradorDeLeilao(daoFalso, carteiroFalso);
         encerrador.encerra();
         
         assertEquals(0, encerrador.getTotalEncerrados());
@@ -73,7 +78,9 @@ public class EncerradorDeLeilaoTest {
 		RepositorioDeLeiloes daoFalso = mock(RepositorioDeLeiloes.class);
 		when(daoFalso.correntes()).thenReturn(new ArrayList<Leilao>());
 		
-		EncerradorDeLeilao encerrador = new EncerradorDeLeilao(daoFalso);
+		EnviadorDeEmail carteiroFalso = mock(EnviadorDeEmail.class);
+		
+		EncerradorDeLeilao encerrador = new EncerradorDeLeilao(daoFalso, carteiroFalso);
 		encerrador.encerra();
 		
 		assertEquals(0, encerrador.getTotalEncerrados());
@@ -89,8 +96,10 @@ public class EncerradorDeLeilaoTest {
 
 		RepositorioDeLeiloes daoFalso = mock(RepositorioDeLeiloes.class);
 		when(daoFalso.correntes()).thenReturn(Arrays.asList(leilao1));
+		
+		EnviadorDeEmail carteiroFalso = mock(EnviadorDeEmail.class);
 
-		EncerradorDeLeilao encerrador = new EncerradorDeLeilao(daoFalso);
+		EncerradorDeLeilao encerrador = new EncerradorDeLeilao(daoFalso, carteiroFalso);
 		encerrador.encerra();
 
 		verify(daoFalso, times(1)).atualiza(leilao1);
