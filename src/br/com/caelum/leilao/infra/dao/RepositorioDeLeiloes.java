@@ -1,4 +1,4 @@
-package br.com.caelum.leilao.interfaces;
+package br.com.caelum.leilao.infra.dao;
 
 import java.util.List;
 
