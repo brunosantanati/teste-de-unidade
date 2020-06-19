@@ -79,6 +79,38 @@ public class GeradorDePagamentoTest {
             pagamentoGerado.getData().get(Calendar.DAY_OF_WEEK));
         assertEquals(9, 
             pagamentoGerado.getData().get(Calendar.DAY_OF_MONTH));
-    }	
+    }
+
+    @Test
+    public void deveEmpurrarPagamentoNoDomingoParaOProximoDiaUtil() {
+        RepositorioDeLeiloes leiloes = mock(RepositorioDeLeiloes.class);
+        RepositorioDePagamentos pagamentos = mock(RepositorioDePagamentos.class);
+        Relogio relogio = mock(Relogio.class);
+
+        Calendar domingo = Calendar.getInstance();
+        domingo.set(2012, Calendar.APRIL, 8);
+        when(relogio.hoje()).thenReturn(domingo);
+
+        Leilao leilao = new CriadorDeLeilao()
+            .para("Playstation")
+            .lance(new Usuario("José da Silva"), 2000.0)
+            .lance(new Usuario("Maria Pereira"), 2500.0)
+            .constroi();
+
+        when(leiloes.encerrados()).thenReturn(Arrays.asList(leilao));
+
+        GeradorDePagamento gerador = 
+            new GeradorDePagamento(leiloes, pagamentos, new Avaliador(), relogio);
+        gerador.gera();
+
+        ArgumentCaptor<Pagamento> argumento = ArgumentCaptor.forClass(Pagamento.class);
+        verify(pagamentos).salva(argumento.capture());
+        Pagamento pagamentoGerado = argumento.getValue();
+
+        assertEquals(Calendar.MONDAY, 
+            pagamentoGerado.getData().get(Calendar.DAY_OF_WEEK));
+        assertEquals(9, 
+            pagamentoGerado.getData().get(Calendar.DAY_OF_MONTH));
+    }    
 	
 }
