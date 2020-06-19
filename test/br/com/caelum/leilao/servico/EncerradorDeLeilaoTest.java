@@ -21,6 +21,10 @@ import br.com.caelum.leilao.interfaces.RepositorioDeLeiloes;
 
 public class EncerradorDeLeilaoTest {
 	
+	/*
+	 * Ainda podemos passar atLeastOnce(), atLeast(numero) e atMost(numero) para o verify(). 
+	 */
+	
 	@Test
     public void deveEncerrarLeiloesQueComecaramUmaSemanaAtras() {
 		Calendar antiga = Calendar.getInstance();
