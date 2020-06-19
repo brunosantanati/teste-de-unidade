@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.times;
@@ -58,6 +59,9 @@ public class EncerradorDeLeilaoTest {
         assertEquals(0, encerrador.getTotalEncerrados());
         assertFalse(leilao1.isEncerrado());
         assertFalse(leilao2.isEncerrado());
+        
+        verify(daoFalso, never()).atualiza(leilao1);
+        verify(daoFalso, never()).atualiza(leilao2);
 	}
 	
 	@Test
