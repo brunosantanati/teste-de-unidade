@@ -109,7 +109,7 @@ public class EncerradorDeLeilaoTest {
 	}
 	
 	@Test
-	public void deveEnviarEmailAposPersistirLeilaoEncerrado() {
+	public void deveEnviarEmailAposPersistirLeilaoEncerrado() throws Exception {
 		Calendar antiga = Calendar.getInstance();
 		antiga.set(1999, 1, 20);
 
@@ -129,7 +129,7 @@ public class EncerradorDeLeilaoTest {
 	}
 	
 	@Test
-    public void deveContinuarAExecucaoMesmoQuandoDaoFalha() {
+    public void deveContinuarAExecucaoMesmoQuandoDaoFalha() throws Exception {
         Calendar antiga = Calendar.getInstance();
         antiga.set(1999, 1, 20);
 
@@ -142,7 +142,20 @@ public class EncerradorDeLeilaoTest {
         when(daoFalso.correntes()).thenReturn(Arrays.asList(leilao1, leilao2));
 
         doThrow(new RuntimeException()).when(daoFalso).atualiza(leilao1);
+        //doThrow(new Exception()).when(daoFalso).atualiza(leilao1); //org.mockito.exceptions.base.MockitoException: Checked exception is invalid for this method!
+        /*
+         * 
 
+		O teste falha, mas porque o Mockito não consegue fazer com que o método lance Exception.
+		
+		Exception é uma exceção checada no Java, e seu lançamento precisa ser explicitamente declarado, o que não acontece no método envia() do EnviadorDeEmail.
+		
+		Por esse motivo a mensagem de erro do teste é: org.mockito.exceptions.base.MockitoException: Checked exception is invalid for this method!. Ou seja, o Mockito percebe isso e falha o teste!
+		
+		Fique sempre atento às exceções que seu método pode lançar.
+
+         */
+        
         Carteiro carteiroFalso = mock(Carteiro.class);
         EncerradorDeLeilao encerrador = 
             new EncerradorDeLeilao(daoFalso, carteiroFalso);
@@ -163,7 +176,7 @@ public class EncerradorDeLeilaoTest {
     }
 	
 	@Test
-    public void deveContinuarAExecucaoMesmoQuandoEnviadorDeEmaillFalha() {
+    public void deveContinuarAExecucaoMesmoQuandoEnviadorDeEmaillFalha() throws Exception {
         Calendar antiga = Calendar.getInstance();
         antiga.set(1999, 1, 20);
 
@@ -176,7 +189,7 @@ public class EncerradorDeLeilaoTest {
         when(daoFalso.correntes()).thenReturn(Arrays.asList(leilao1, leilao2));
 
         Carteiro carteiroFalso = mock(Carteiro.class);
-        doThrow(new RuntimeException()).when(carteiroFalso).envia(leilao1);
+        doThrow(new Exception()).when(carteiroFalso).envia(leilao1);
 
         EncerradorDeLeilao encerrador =
             new EncerradorDeLeilao(daoFalso, carteiroFalso);
