@@ -109,7 +109,7 @@ public class EncerradorDeLeilaoTest {
 	}
 	
 	@Test
-	public void deveEnviarEmailAposPersistirLeilaoEncerrado() throws Exception {
+	public void deveEnviarEmailAposPersistirLeilaoEncerrado() {
 		Calendar antiga = Calendar.getInstance();
 		antiga.set(1999, 1, 20);
 
@@ -129,7 +129,7 @@ public class EncerradorDeLeilaoTest {
 	}
 	
 	@Test
-    public void deveContinuarAExecucaoMesmoQuandoDaoFalha() throws Exception {
+    public void deveContinuarAExecucaoMesmoQuandoDaoFalha() {
         Calendar antiga = Calendar.getInstance();
         antiga.set(1999, 1, 20);
 
@@ -176,7 +176,7 @@ public class EncerradorDeLeilaoTest {
     }
 	
 	@Test
-    public void deveContinuarAExecucaoMesmoQuandoEnviadorDeEmaillFalha() throws Exception {
+    public void deveContinuarAExecucaoMesmoQuandoEnviadorDeEmaillFalha() {
         Calendar antiga = Calendar.getInstance();
         antiga.set(1999, 1, 20);
 
@@ -189,7 +189,7 @@ public class EncerradorDeLeilaoTest {
         when(daoFalso.correntes()).thenReturn(Arrays.asList(leilao1, leilao2));
 
         Carteiro carteiroFalso = mock(Carteiro.class);
-        doThrow(new Exception()).when(carteiroFalso).envia(leilao1);
+        doThrow(new RuntimeException()).when(carteiroFalso).envia(leilao1);
 
         EncerradorDeLeilao encerrador =
             new EncerradorDeLeilao(daoFalso, carteiroFalso);
@@ -198,5 +198,33 @@ public class EncerradorDeLeilaoTest {
 
         verify(daoFalso).atualiza(leilao2);
         verify(carteiroFalso).envia(leilao2);
-    }	
+    }
+	
+	//E se nosso DAO lançar exceção para TODOS leilões da lista? Escreva esse teste e garanta que o carteiro nunca seja invocado. 
+	@Test
+	public void deveDesistirSeDaoFalhaPraSempre() {
+        Calendar antiga = Calendar.getInstance();
+        antiga.set(1999, 1, 20);
+
+        Leilao leilao1 = new CriadorDeLeilao().para("TV de plasma")
+            .naData(antiga).constroi();
+        Leilao leilao2 = new CriadorDeLeilao().para("Geladeira")
+            .naData(antiga).constroi();
+
+        RepositorioDeLeiloes daoFalso = mock(RepositorioDeLeiloes.class);
+        when(daoFalso.correntes()).thenReturn(Arrays.asList(leilao1, leilao2));
+
+        Carteiro carteiroFalso = mock(Carteiro.class);
+        
+        doThrow(new RuntimeException()).when(daoFalso).atualiza(leilao1);
+        doThrow(new RuntimeException()).when(daoFalso).atualiza(leilao2);
+
+        EncerradorDeLeilao encerrador =
+            new EncerradorDeLeilao(daoFalso, carteiroFalso);
+
+        encerrador.encerra();
+
+        verify(carteiroFalso, never()).envia(leilao1);
+        verify(carteiroFalso, times(0)).envia(leilao2);
+	}
 }
