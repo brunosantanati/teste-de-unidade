@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -84,6 +85,6 @@ public class EncerradorDeLeilaoTest {
 		EncerradorDeLeilao encerrador = new EncerradorDeLeilao(daoFalso);
 		encerrador.encerra();
 
-		verify(daoFalso).atualiza(leilao1);
+		verify(daoFalso, times(1)).atualiza(leilao1);
 	}
 }
